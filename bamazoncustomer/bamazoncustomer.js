@@ -26,7 +26,7 @@ var start = function() {
         for (i = 0; i < res.length; i++) {
           console.log(colors.bold(res[i].item_id) + ": " + colors.blue(res[i].product_name) + " costs $" + res[i].price);
         }
-      
+    
         inquirer.prompt([
             {
                 name: "productID",
@@ -41,12 +41,23 @@ var start = function() {
         ]).then(function(answer) {
             var buyAmt = answer.productAmt;
             var quantity = res[answer.productID].stock_quantity;
+            var newQ = quantity - buyAmt;
+            var price = res[answer.productID].price;
+            var totalPrice = price * buyAmt;
             
+
             if (buyAmt > quantity){
                 console.log("Insufficient Quantity!".red);
-            }
-        })
             
+            } else {
+                console.log(("Your Total is: $" + totalPrice).green);
+                connection.query("UPDATE products SET stock_quantity = " + newQ + " WHERE item_id = " + answer.productID + ";", function(err, res) {
+                    if (err) throw err;
+                    
+                })
+            } 
+        
+        })  
     })
 }
 
