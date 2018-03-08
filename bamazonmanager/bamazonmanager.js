@@ -58,10 +58,16 @@ var start = function(){
             }) 
         }
 
-        
+
         var inventoryLow = function() {
-        console.log("View Low Inventory");
+               connection.query("SELECT * FROM products where stock_quantity < 6", function(err, res, fields) {
+                    for (i = 0; i < res.length; i++){
+                        table2.push([colors.bold(res[i].item_id), res[i].product_name, res[i].department_name, "$" + res[i].price,  res[i].stock_quantity]);
+                    }
+                    console.log(table2.toString());
+                }) 
         }
+
         var inventoryAdd = function() {
         console.log("Add to Inventory");
         }
@@ -92,4 +98,8 @@ var table = new Table({
   colWidths: []
 });
 
-// table is an Array, so you can `push`, `unshift`, `splice` and friends
+var table2 = new Table({
+  head: ["ID", "Product", "Department", "Price", "Stock"],
+  colWidths: []
+});
+
