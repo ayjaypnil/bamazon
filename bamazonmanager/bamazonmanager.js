@@ -103,14 +103,26 @@ var start = function(){
                     }
                 ]).then(function(answer) {
                     var what = answer.productStock;
-                    var many = answer.amountStock;
+                    var many = parseInt(answer.amountStock);
+                    var total;
                     
-                    console.log(what+many);
                     
-                    connection.query("UPDATE products SET stock_quantity = '" + many + "' WHERE product_name ='" + what + "'", function(err, res, fields) {
-                        
-                        console.log("UPDATE products SET stock_quantity = '" + many + "' WHERE product_name ='" + what + "'");
-                    }) 
+                    console.log(many)
+                
+                     connection.query("SELECT stock_quantity FROM products where product_name ='"+ what +"'", function(err, res, fields) {
+                        for(i = 0; i < res.length; i++){
+                            var current = parseInt(res[i].stock_quantity);
+                            console.log(current);
+                        }
+                        // need to add the numbers together and pas throguht below to update to that. 
+                        current += many;
+                        console.log(current);
+                     
+
+                        connection.query("UPDATE products SET stock_quantity = '" + current + "' WHERE product_name ='" + what + "'", function(err, res, fields) {
+                            if (err) throw err;
+                        }) 
+                })
             
                 })
         }
