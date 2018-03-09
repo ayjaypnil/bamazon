@@ -69,8 +69,52 @@ var start = function(){
         }
 
         var inventoryAdd = function() {
-        console.log("Add to Inventory");
+            connection.query("SELECT * FROM products", function(err, res, fields) {
+                    for (i = 0; i < res.length; i++){
+                        table3.push([colors.bold(res[i].item_id), res[i].product_name, res[i].stock_quantity]);
+                    }
+                    console.log(table3.toString());
+                }) 
+                
+                    inquirer.prompt([
+                    {
+                        name: "productStock",
+                        type: "list",
+                        message: "Which product would you like to restock?",
+                        choices: [
+                            "wand",
+                            "broomstick",
+                            "owl",
+                            "trunk",
+                            "sword",
+                            "crossbow",
+                            "horse",
+                            "trebuchet",
+                            "skateboard",
+                            "bicycle",
+                            "motorcycle",
+                            "car"
+                        ]
+                    },
+                    {
+                        name: "amountStock",
+                        type: "string",
+                        message: "How many units would you like to restock?"
+                    }
+                ]).then(function(answer) {
+                    var what = answer.productStock;
+                    var many = answer.amountStock;
+                    
+                    console.log(what+many);
+                    
+                    connection.query("UPDATE products SET stock_quantity = '" + many + "' WHERE product_name ='" + what + "'", function(err, res, fields) {
+                        
+                        console.log("UPDATE products SET stock_quantity = '" + many + "' WHERE product_name ='" + what + "'");
+                    }) 
+            
+                })
         }
+
         var productAdd = function() {
         console.log("Add New Product");
         };
@@ -103,3 +147,7 @@ var table2 = new Table({
   colWidths: []
 });
 
+var table3 = new Table({
+  head: ["ID", "Product", "Stock"],
+  colWidths: []
+});

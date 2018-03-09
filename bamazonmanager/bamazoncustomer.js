@@ -1,6 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var colors = require("colors");
+var Table = require("cli-table");
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -23,9 +24,10 @@ connection.connect(function(err) {
 var start = function() {
 
     connection.query("SELECT * FROM products", function(err, res) {
-        for (i = 0; i < res.length; i++) {
-          console.log(colors.bold(res[i].item_id) + ": " + colors.blue(res[i].product_name) + " costs $" + res[i].price);
-        }
+            for (i = 0; i < res.length; i++){
+                    table.push([colors.bold(res[i].item_id), res[i].product_name, res[i].department_name, "$" + res[i].price,  res[i].stock_quantity]);
+                }
+                console.log(table.toString());
     
         inquirer.prompt([
             {
@@ -72,4 +74,10 @@ colors.setTheme({
   warn: "yellow",
   debug: "blue",
   error: "red"
+});
+
+
+var table = new Table({
+  head: ["ID", "Product", "Department", "Price", "Stock"],
+  colWidths: []
 });
