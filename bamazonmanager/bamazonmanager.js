@@ -93,7 +93,8 @@ var start = function(){
                             "skateboard",
                             "bicycle",
                             "motorcycle",
-                            "car"
+                            "car",
+                            "mike"
                         ]
                     },
                     {
@@ -128,7 +129,48 @@ var start = function(){
         }
 
         var productAdd = function() {
-        console.log("Add New Product");
+            inquirer
+              .prompt([
+                {
+                  name: "product_name",
+                  type: "text",
+                  message: "What is the name of the product?"
+                },
+                {
+                  name: "department_name",
+                  type: "text",
+                  message:
+                    "What is the department your product belongs in?"
+                },
+                {
+                  name: "price",
+                  type: "text",
+                  message: "What is the price of your product"
+                },
+                {
+                  name: "stock_quantity",
+                  type: "text",
+                  message: "What is the quantity of your product?"
+                }
+              ])
+              .then(function(answers) {
+                                        var product_name = answers.product_name;
+                                        var department_name = answers.department_name;
+                                        var price = answers.price;
+                                        var stock_quantity = answers.stock_quantity;
+
+                                        console.log(product_name);
+                                        console.log(department_name);
+                                        console.log(price);
+                                        console.log(stock_quantity);
+
+                                        var query = "INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ('" + product_name + "', '" + department_name + "', '" + price + "', '" + stock_quantity + "')";
+                                        console.log(query);
+                                        connection.query(query , function(err, res, fields) {
+                                            if (err) throw err;
+                                            console.log("worked");
+                                        })
+                                      });
         };
 
 
